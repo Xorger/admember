@@ -1,5 +1,7 @@
-{% extends "layout.html" %}
-
-{% block body %}
-<h1>Hello</h1>
+{% extends "layout.html" %} {% block body %}
+<ul>
+    {% for item in rows %}
+    <li>{{ item }}</li>
+    {% endfor %}
+</ul>
 {% endblock body %}
