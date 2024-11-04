@@ -1,7 +1,15 @@
 {% extends "layout.html" %} {% block body %}
-<ul>
-    {% for item in rows %}
-    <li>{{ item }}</li>
-    {% endfor %}
-</ul>
+
+<div class="container" style="margin-top: 15rem">
+    <table class="table">
+        {% for row in rows %}
+        <tr>
+            {% for column in row %}
+            <td>{{ column }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
 {% endblock body %}
