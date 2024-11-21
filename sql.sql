@@ -1,1 +1,0 @@
-CREATE TABLE IF NOT EXISTS users (user_id integer AUTOINCREMENT PRIMARY KEY, username text NOT NULL, name text NOT NULL, password_hash text NOT NULL, status integer NOT NULL DEFAULT FALSE, admin integer NOT NULL DEFAULT FALSE);

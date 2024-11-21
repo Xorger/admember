@@ -1,0 +1,10 @@
+{% extends "layout.html" %} {% block body %}
+
+<div class="container" style="margin-top: 15rem">
+    <form action="/login" method="post">
+        <input type="text" id="username" name="username" placeholder="Username">
+        <input type="password" id="password" name="password" placeholder="Password">
+        <button type="submit">Log-in</button>
+</div>
+
+{% endblock body %}
