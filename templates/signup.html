@@ -1,11 +1,28 @@
 {% extends "layout.html" %} {% block body %}
 
 <div class="container" style="margin-top: 15rem">
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <div class="notification is-danger">
+        {{ messages[0] }}. Go to
+        <a href="/login">login page</a>.
+    </div>
+    {% endif %} {% endwith %}
     <form action="/signup" method="post">
-        <input type="text" id="username" name="username" placeholder="Username">
-        <input type="text" id="name" name="name" placeholder="Name">
-        <input type="password" id="password" name="password" placeholder="Password">
+        <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Username"
+        />
+        <input type="text" id="name" name="name" placeholder="Name" />
+        <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Password"
+        />
         <button type="submit">Sign-up</button>
+    </form>
 </div>
 
 {% endblock body %}
