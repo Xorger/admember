@@ -1,35 +1,11 @@
 {% extends "layout.html" %} {% block body %}
 
 <div class="container" style="margin-top: 15rem">
-    {% with messages = get_flashed_messages() %} {% if messages %}
-    <div class="notification is-danger">
-        {{ messages[0] }} Go to <a href="/families">Families</a>
-    </div>
-    {% endif %} {% endwith %}
-    <div>
-        <form action="/" method="post" enctype="multipart/form-data">
-            <input
-                id="name"
-                name="name"
-                type="text"
-                placeholder="Name"
-                autocomplete="off"
-            />
-            <input
-                id="family_name"
-                name="family_name"
-                type="text"
-                placeholder="Family Name"
-                autocomplete="off"
-            />
-            <button type="submit">Add Member</button>
-        </form>
-    </div>
     <table class="table">
         {% for row in rows %}
         <tr>
-            {% for key, value in row.items() %}
-            <td>{{ value }}</td>
+            {% for column in row %}
+            <td>{{ column }}</td>
             {% endfor %}
         </tr>
         {% endfor %}
