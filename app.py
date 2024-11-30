@@ -1,11 +1,10 @@
 import os
-import re
-from flask.templating import _render
-from typing_extensions import NewType
 from flask import Flask, render_template, redirect, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
@@ -18,18 +17,23 @@ app.config["SECRET_KEY"] = "fb7f067a03c408275de2f89e991b3d97548553ee17cec8c8deb1
 # Get them logins inited
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = "login"
 
 class User(db.Model, UserMixin):
-    user_id = db.Column(db.Integer, primary_key = True)
-    username = db.Column(db.String(20), unique = True, nullable = False)
-    name = db.Column(db.String(100), nullable = False)
-    password_hash = db.Column(db.String(80), nullable = False)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    password_hash = db.Column(db.String(80), nullable=False)
 
 class Members(db.Model):
-    member_id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(80), nullable = False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    family_id = db.Column(db.Integer, db.ForeignKey("families.id"), nullable=False)
+    status = db.Column(db.Boolean, nullable=False, default=False)
 
+class Families(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    members = db.relationship("Members", backref="family", lazy=True)
 
 with app.app_context():
     db.create_all()
@@ -38,8 +42,8 @@ with app.app_context():
 
 # User loader thingy for flask-login
 @login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
+def load_user(id):
+    return db.session.get(User, id)
 
 # Signup route that stores creds in db (password is hashed)
 @app.route("/signup", methods=["GET", "POST"])
@@ -48,9 +52,7 @@ def signup():
         # Get all fields
         username = request.form.get("username")
         password = request.form.get("password")
-        name = request.form.get("name")
 
-        print(f"Received: username={username}, name={name}")
 
         # Check if the user exists
         if User.query.filter_by(username=username).first():
@@ -58,7 +60,7 @@ def signup():
             return redirect("/signup")
 
         # Create a variable to store the new users creds
-        new_user = User(username=username, name=name, password_hash=generate_password_hash(password, method="pbkdf2:sha256"))
+        new_user = User(username=username, password_hash=generate_password_hash(password, method="pbkdf2:sha256"))
 
         # Modify the database
         db.session.add(new_user)
@@ -76,6 +78,7 @@ def login():
         # Get data from the form
         username = request.form.get("username")
         password = request.form.get("password")
+        remember = request.form.get("remember")
 
         # Check if the user actually exists
         user = User.query.filter_by(username=username).first()
@@ -98,11 +101,38 @@ def logout():
     return redirect("/login")
 
 # Index route that lists members and checks them in
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    return "Index (TODO)"
-    #return render_template("index.html", rows=None)
+    if request.method == "POST":
+
+        name = request.form.get("name")
+        family_name = request.form.get("family_name")
+
+        if not name or not family_name:
+            flash("Please enter both Name and Family name.")
+
+        family = Families.query.filter_by(name=family_name.title()).first()
+        if family:
+            new_member = Members(name=name, family=family)
+            db.session.add(new_member)
+            db.session.commit()
+        else:
+            flash(f"Family \"{family_name}\" not found.")
+
+        return redirect("/")
+
+    all_members = db.session.query(Members).all()
+    result = [{
+        "id": member.id,
+        "name": member.name,
+        "family_id": member.family_id,
+        "status": member.status
+    } for member in all_members]
+
+    return render_template("index.html", rows=result)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
