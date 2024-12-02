@@ -1,0 +1,27 @@
+{% extends "layout.html" %} {% block body %}
+
+<div class="container" style="margin-top: 15rem">
+    <div>
+        <form action="/families" method="post" enctype="multipart/form-data">
+            <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Name"
+                autocomplete="off"
+            />
+            <button type="submit">Add Family</button>
+        </form>
+    </div>
+    <table class="table">
+        {% for row in rows %}
+        <tr>
+            {% for key, value in row.items() %}
+            <td>{{ value }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock body %}

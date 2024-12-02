@@ -89,7 +89,7 @@ def login():
             return redirect("/login") # if the user doesn't exist or password is wrong, reload the page
 
         # If the above check passes, then we know the user has the right credentials
-        login_user(user, remember=remember)
+        login_user(user, remember=remember is not None)
         return redirect("/")
     return render_template("login.html")
 
@@ -132,6 +132,29 @@ def index():
 
     return render_template("index.html", rows=result)
 
+@app.route("/families", methods=["GET", "POST"])
+@login_required
+def families():
+    if request.method == "POST":
+
+        name = request.form.get("name")
+
+        if not name:
+            flash("Please enter both Name and Family name.")
+
+        new_family = Families(name=name)
+        db.session.add(new_family)
+        db.session.commit()
+
+        return redirect("/families")
+
+    all_families = db.session.query(Families).all()
+    result = [{
+        "id": family.id,
+        "name": family.name,
+    } for family in all_families]
+
+    return render_template("families.html", rows=result)
 
 
 if __name__ == "__main__":
