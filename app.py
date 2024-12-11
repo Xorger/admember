@@ -122,13 +122,15 @@ def index():
 
         return redirect("/")
 
-    all_members = db.session.query(Members).all()
+    stmt = select(Members, Families).join(Families, Members.family_id == Families.id) #Join Members and Families
+    results = db.session.execute(stmt).all() #Fetch results as tuples
     result = [{
         "id": member.id,
         "name": member.name,
         "family_id": member.family_id,
-        "status": member.status
-    } for member in all_members]
+        "status": member.status,
+        "family_name": family.name
+    } for member, family in results]
 
     return render_template("index.html", rows=result)
 
@@ -156,6 +158,18 @@ def families():
 
     return render_template("families.html", rows=result)
 
+@app.route("/check", methods=["POST"])
+@login_required
+def check():
+    member_id = request.form.get("id")
+
+    print(member_id)
+
+    member = Members.query.filter_by(id=member_id).first()
+    member.status = not member.status  # Toggle the boolean value
+    db.session.commit()
+
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True)

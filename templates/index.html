@@ -26,11 +26,40 @@
         </form>
     </div>
     <table class="table">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Family Name</th>
+            <th>Check-in/out</th>
+        </tr>
         {% for row in rows %}
         <tr>
-            {% for key, value in row.items() %}
-            <td>{{ value }}</td>
-            {% endfor %}
+            <td>{{ row.id }}</td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.family_name }}</td>
+            <td>
+                {% if row.status == True %}
+                <form action="/check" method="post">
+                    <input
+                        type="hidden"
+                        value="{{ row.id }}"
+                        id="id"
+                        name="id"
+                    />
+                    <button>Check-out</button>
+                </form>
+                {% else %}
+                <form action="/check" method="post">
+                    <input
+                        type="hidden"
+                        value="{{ row.id }}"
+                        id="id"
+                        name="id"
+                    />
+                    <button>Check-in</button>
+                </form>
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </table>
