@@ -171,5 +171,31 @@ def check():
 
     return redirect("/")
 
+@app.route("/delmember", methods=["POST"])
+@login_required
+def delmember():
+    member_id = request.form.get("del_id")
+    print(member_id)
+    member = db.session.get(Members, member_id)  # More efficient way to get by ID
+    print(member)
+    db.session.delete(member)
+    db.session.commit()
+    return redirect("/")
+
+@app.route("/delfamily", methods=["POST"])
+@login_required
+def delfamily():
+    family_id = request.form.get("id")
+    print(family_id)
+    family = db.session.get(Families, family_id)
+    members = db.session.query(Members).filter_by(family_id=family_id).all()
+    if members:
+        flash(f"{len(members)} member(s) is(are) using this family. Delete them first.")
+        return redirect("/families")
+    print(family)
+    db.session.delete(family)
+    db.session.commit()
+    return redirect("/families")
+
 if __name__ == "__main__":
     app.run(debug=True)

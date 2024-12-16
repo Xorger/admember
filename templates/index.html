@@ -27,10 +27,11 @@
     </div>
     <table class="table">
         <tr>
-            <th>Id</th>
+            <th>ID</th>
             <th>Name</th>
             <th>Family Name</th>
             <th>Check-in/out</th>
+            <th>Delete</th>
         </tr>
         {% for row in rows %}
         <tr>
@@ -59,6 +60,17 @@
                     <button>Check-in</button>
                 </form>
                 {% endif %}
+            </td>
+            <td>
+                <form action="/delmember" method="post">
+                    <input
+                        type="hidden"
+                        value="{{ row.id }}"
+                        id="del_id"
+                        name="del_id"
+                    />
+                    <button type="submit">Delete</button>
+                </form>
             </td>
         </tr>
         {% endfor %}

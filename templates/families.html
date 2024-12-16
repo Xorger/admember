@@ -1,6 +1,9 @@
 {% extends "layout.html" %} {% block body %}
 
 <div class="container" style="margin-top: 15rem">
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <div class="notification is-danger">{{ messages[0] }}</div>
+    {% endif %} {% endwith %}
     <div>
         <form action="/families" method="post" enctype="multipart/form-data">
             <input
@@ -14,11 +17,26 @@
         </form>
     </div>
     <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Delete</th>
+        </tr>
         {% for row in rows %}
         <tr>
-            {% for key, value in row.items() %}
-            <td>{{ value }}</td>
-            {% endfor %}
+            <td>{{ row.id }}</td>
+            <td>{{ row.name }}</td>
+            <td>
+                <form action="/delfamily" method="post">
+                    <input
+                        type="hidden"
+                        value="{{ row.id }}"
+                        id="id"
+                        name="id"
+                    />
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>
