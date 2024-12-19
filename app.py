@@ -122,6 +122,19 @@ def index():
 
         return redirect("/")
 
+    if q := request.args.get("q"):
+        stmt = select(Members, Families).join(Families, Members.family_id == Families.id).filter(Members.name.like(q)) #Join Members and Families
+        results = db.session.execute(stmt).all() #Fetch results as tuples
+        result = [{
+            "id": member.id,
+            "name": member.name,
+            "family_id": member.family_id,
+            "status": member.status,
+            "family_name": family.name
+        } for member, family in results]
+
+        return render_template("index.html", rows=result)
+
     stmt = select(Members, Families).join(Families, Members.family_id == Families.id) #Join Members and Families
     results = db.session.execute(stmt).all() #Fetch results as tuples
     result = [{
@@ -149,6 +162,18 @@ def families():
         db.session.commit()
 
         return redirect("/families")
+
+    if q := request.args.get("q"):
+
+        all_families = db.session.query(Families).filter(Families.name.like(q))
+        result = [{
+            "id": family.id,
+            "name": family.name,
+        } for family in all_families]
+
+        return render_template("families.html", rows=result)
+
+
 
     all_families = db.session.query(Families).all()
     result = [{
