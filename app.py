@@ -1,7 +1,8 @@
+from enum import member
 import os
 from flask import Flask, render_template, redirect, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
+from flask_login import LoginManager, UserMixin, current_user, login_required, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -221,6 +222,38 @@ def delfamily():
     db.session.delete(family)
     db.session.commit()
     return redirect("/families")
+
+@app.route("/user", methods=["GET", "POST"])
+@login_required
+def user():
+    if request.method == "POST":
+        oldpass = request.form.get("oldpass")
+        newpass = request.form.get("newpass")
+        again = request.form.get("again")
+
+        if not oldpass or not newpass or not again:
+            flash("Please fill in all fields.")
+            return redirect("/user")
+
+        if newpass != again:
+            flash("New passwords do not match.")
+            return redirect("/user")
+
+        user = User.query.filter_by(id=current_user.id).first()
+        if user:
+            if check_password_hash(user.password_hash, oldpass):
+                user.password_hash = generate_password_hash(newpass, method="pbkdf2:sha256")
+                db.session.commit()
+                flash("Password changed successfully!")
+                return redirect("/")
+            else:
+                flash("Incorrect old password.")
+                return redirect("/user")
+        else:
+            flash("User not found.")  #Handle missing user
+            return redirect("/user") #Return to prevent errors after flash message
+
+    return render_template("user.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

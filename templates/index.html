@@ -3,7 +3,9 @@
 <div class="container" style="margin-top: 15rem">
     {% with messages = get_flashed_messages() %} {% if messages %}
     <div class="notification is-danger">
-        {{ messages[0] }} Go to <a href="/families">Families</a>
+        {% if messages[0] == "Password changed successfully!" %} {{ messages[0]
+        }} {% else %} {{ messages[0] }} Go to <a href="/families">Families</a>
+        {% endif %}
     </div>
     {% endif %} {% endwith %}
     <div>
