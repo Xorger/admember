@@ -1,4 +1,3 @@
-from enum import member
 import os
 from flask import Flask, render_template, redirect, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -227,6 +226,13 @@ def delfamily():
 @login_required
 def user():
     if request.method == "POST":
+
+        if request.form.get("delete"):
+            user = db.session.get(User, current_user.id)
+            db.session.delete(user)
+            db.session.commit()
+            return redirect("/")
+
         oldpass = request.form.get("oldpass")
         newpass = request.form.get("newpass")
         again = request.form.get("again")
