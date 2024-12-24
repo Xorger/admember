@@ -1,27 +1,35 @@
 {% extends "layout.html" %}{% block body %}
-<form action="/user" method="post">
-    <input
-        type="password"
-        name="oldpass"
-        id="oldpass"
-        placeholder="Old Password"
-    />
-    <input
-        type="password"
-        name="newpass"
-        id="newpass"
-        placeholder="New Password"
-    />
-    <input
-        type="password"
-        name="again"
-        id="again"
-        placeholder="New Password (again)"
-    />
-    <button type="submit">Change password</button>
-</form>
-<form action="/user" method="post">
-    <input type="submit" name="delete" id="delete" value="Delete user" />
-</form>
+<div class="container text-center" style="margin-top: 15rem">
+    <form action="/user" method="post">
+        <div>
+            <input
+                type="password"
+                name="oldpass"
+                id="oldpass"
+                placeholder="Old Password"
+            />
+        </div>
+        <div>
+            <input
+                type="password"
+                name="newpass"
+                id="newpass"
+                placeholder="New Password"
+            />
+        </div>
+        <div>
+            <input
+                type="password"
+                name="again"
+                id="again"
+                placeholder="New Password (again)"
+            />
+        </div>
+        <button type="submit">Change password</button>
+    </form>
+    <form action="/user" method="post">
+        <input type="submit" name="delete" id="delete" value="Delete user" />
+    </form>
+</div>
 
 {% endblock body %}

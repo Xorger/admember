@@ -1,26 +1,33 @@
 {% extends "layout.html" %} {% block body %}
 
-<div class="container" style="margin-top: 15rem">
+<div class="container text-center" style="margin-top: 15rem">
     {% with messages = get_flashed_messages() %} {% if messages %}
     <div class="notification is-danger">{{ messages[0] }}</div>
     {% endif %} {% endwith %}
     <form action="/login" method="post">
-        <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Username"
-            autocomplete="off"
-        />
-        <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Password"
-            autocomplete="off"
-        />
-        <input type="checkbox" id="remember" name="remember" />
-        <label for="remember">Remember me</label>
+        <div>
+            <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Username"
+                autocomplete="off"
+            />
+        </div>
+        <div>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+                autocomplete="off"
+            />
+        </div>
+        <div>
+            <input type="checkbox" id="remember" name="remember" />
+            <label for="remember">Remember me</label>
+        </div>
+
         <button type="submit">Log-in</button>
     </form>
 </div>
