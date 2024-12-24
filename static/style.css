@@ -2,3 +2,10 @@ body {
     background-color: #36393b;
     color: whitesmoke;
 }
+.btn-thin {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+}
+.table td {
+    font-size: 1.25rem;
+}

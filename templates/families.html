@@ -6,18 +6,33 @@
     {% endif %} {% endwith %}
     <div>
         <form action="/families" method="get">
-            <input id="q" name="q" type="text" placeholder="Search" />
-            <button type="submit">Search</button>
+            <div class="input-group mb-3">
+                <input
+                    class="form-control"
+                    id="q"
+                    name="q"
+                    type="text"
+                    placeholder="Search"
+                />
+                <button type="submit" class="btn btn-outline-secondary">
+                    Search
+                </button>
+            </div>
         </form>
         <form action="/families" method="post" enctype="multipart/form-data">
-            <input
-                id="name"
-                name="name"
-                type="text"
-                placeholder="Name"
-                autocomplete="off"
-            />
-            <button type="submit">Add Family</button>
+            <div class="input-group mb-3">
+                <input
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    type="text"
+                    placeholder="Name"
+                    autocomplete="off"
+                />
+                <button type="submit" class="btn btn-outline-secondary">
+                    Add Family
+                </button>
+            </div>
         </form>
     </div>
     <table class="table">
@@ -38,7 +53,9 @@
                         id="id"
                         name="id"
                     />
-                    <button type="submit">Delete</button>
+                    <button type="submit" class="btn btn-danger btn-thin">
+                        Delete
+                    </button>
                 </form>
             </td>
         </tr>

@@ -10,25 +10,40 @@
     {% endif %} {% endwith %}
     <div>
         <form action="/" method="get">
-            <input id="q" name="q" type="text" placeholder="Search" />
-            <button type="submit">Search</button>
+            <div class="input-group mb-3">
+                <input
+                    class="form-control"
+                    id="q"
+                    name="q"
+                    type="text"
+                    placeholder="Search"
+                />
+                <button type="submit" class="btn btn-outline-secondary">
+                    Search
+                </button>
+            </div>
         </form>
         <form action="/" method="post" enctype="multipart/form-data">
-            <input
-                id="name"
-                name="name"
-                type="text"
-                placeholder="Name"
-                autocomplete="off"
-            />
-            <input
-                id="family_name"
-                name="family_name"
-                type="text"
-                placeholder="Family Name"
-                autocomplete="off"
-            />
-            <button type="submit">Add Member</button>
+            <div class="input-group mb-3">
+                <input
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    type="text"
+                    placeholder="Name"
+                    autocomplete="off"
+                />
+                <input
+                    class="form-control"
+                    id="family_name"
+                    name="family_name"
+                    type="text"
+                    placeholder="Family Name"
+                    autocomplete="off"
+                />
+                <button type="submit" class="btn btn-outline-secondary">
+                    Add Member
+                </button>
         </form>
     </div>
     <table class="table">
@@ -53,7 +68,7 @@
                         id="id"
                         name="id"
                     />
-                    <button>Check-out</button>
+                    <button type="submit" class="btn btn-danger btn-thin">Check-out</button>
                 </form>
                 {% else %}
                 <form action="/check" method="post">
@@ -63,7 +78,7 @@
                         id="id"
                         name="id"
                     />
-                    <button>Check-in</button>
+                    <button type="submit" class="btn btn-success btn-thin">Check-in</button>
                 </form>
                 {% endif %}
             </td>
@@ -75,7 +90,7 @@
                         id="del_id"
                         name="del_id"
                     />
-                    <button type="submit">Delete</button>
+                    <button type="submit" class="btn btn-danger btn-thin">Delete</button>
                 </form>
             </td>
         </tr>
