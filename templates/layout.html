@@ -29,7 +29,9 @@
                 </button>
                 <div class="collapse navbar-collapse" id="mainNav">
                     <div class="d-flex justify-content-between w-100">
-                        <ul class="navbar-nav">
+                        <ul class="navbar-nav me-auto">
+                            <!-- Left-aligned items -->
+                            {% if current_user.is_authenticated %}
                             <li class="nav-item">
                                 <a class="nav-link" href="/families"
                                     >Families</a
@@ -38,17 +40,22 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/user">Account</a>
                             </li>
+                            {% endif %}
                         </ul>
                         <ul class="navbar-nav">
+                            <!-- Right-aligned items -->
+                            {% if not current_user.is_authenticated %}
                             <li class="nav-item">
                                 <a class="nav-link" href="/login">Login</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/signup">Sign-up</a>
                             </li>
+                            {% endif %} {% if current_user.is_authenticated %}
                             <li class="nav-item">
                                 <a class="nav-link" href="/logout">Logout</a>
                             </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
