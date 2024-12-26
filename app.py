@@ -52,11 +52,14 @@ def signup():
         # Get all fields
         username = request.form.get("username")
         password = request.form.get("password")
+        again = request.form.get("again")
 
+        if password != again:
+            flash("Passwords do not match")
 
         # Check if the user exists
         if User.query.filter_by(username=username).first():
-            flash("Email address already exists")
+            flash("Username already exists")
             return redirect("/signup")
 
         # Create a variable to store the new users creds
@@ -78,7 +81,12 @@ def login():
         # Get data from the form
         username = request.form.get("username")
         password = request.form.get("password")
+        again = request.form.get("again")
         remember = request.form.get("remember")
+
+        if again != password:
+            flash("Passwords do not match")
+            return redirect("/login")
 
         # Check if the user actually exists
         user = User.query.filter_by(username=username).first()
@@ -227,12 +235,18 @@ def delfamily():
 def user():
     if request.method == "POST":
 
-        if request.form.get("delete"):
+        if delpass := request.form.get("delpass"):
             user = db.session.get(User, current_user.id)
-            db.session.delete(user)
-            db.session.commit()
-            return redirect("/")
-
+            if check_password_hash(user.password_hash, delpass):
+                db.session.delete(user)
+                db.session.commit()
+                return redirect("/")
+            else:
+                flash("Password incorrect")
+                return redirect("/user")
+        else:
+            flash("Please enter password")
+            return redirect("/user")
         oldpass = request.form.get("oldpass")
         newpass = request.form.get("newpass")
         again = request.form.get("again")

@@ -1,5 +1,10 @@
 {% extends "layout.html" %}{% block body %}
 <div class="container text-center" style="margin-top: 15rem">
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <div class="alert alert-danger" role="alert">{{ messages[0] }}</div>
+    {% endif %} {% endwith %}
+    <p class="h1">Account</p>
+    <p class="h4">Change password</p>
     <form action="/user" method="post">
         <div>
             <input
@@ -7,6 +12,7 @@
                 name="oldpass"
                 id="oldpass"
                 placeholder="Old Password"
+                class="form-control mb-2"
             />
         </div>
         <div>
@@ -15,6 +21,7 @@
                 name="newpass"
                 id="newpass"
                 placeholder="New Password"
+                class="form-control mb-2"
             />
         </div>
         <div>
@@ -23,12 +30,25 @@
                 name="again"
                 id="again"
                 placeholder="New Password (again)"
+                class="form-control mb-2"
             />
         </div>
-        <button type="submit">Change password</button>
+        <button type="submit" class="btn btn-primary mb-3">
+            Change password
+        </button>
+
+        <p class="h4">Change password</p>
     </form>
     <form action="/user" method="post">
-        <input type="submit" name="delete" id="delete" value="Delete user" />
+        <input
+            type="password"
+            name="delpass"
+            id="delpass"
+            autocomplete="off"
+            placeholder="Password"
+            class="form-control mb-2"
+        />
+        <button type="submit" class="btn btn-warning">Delete user</button>
     </form>
 </div>
 

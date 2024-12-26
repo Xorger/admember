@@ -1,6 +1,7 @@
 {% extends "layout.html" %} {% block body %}
 
 <div class="container text-center" style="margin-top: 15rem">
+    <p class="h1">Sign-up</p>
     {% with messages = get_flashed_messages() %} {% if messages %}
     <div class="notification is-danger">
         {{ messages[0] }}. Go to
@@ -8,24 +9,39 @@
     </div>
     {% endif %} {% endwith %}
     <form action="/signup" method="post">
-        <div>
+        <div class="mb-1">
             <input
                 type="text"
                 id="username"
                 name="username"
                 placeholder="Username"
                 autocomplete="off"
+                class="form-control"
             />
         </div>
-        <div>
+        <div class="mb-1">
             <input
                 type="password"
                 id="password"
                 name="password"
                 placeholder="Password"
+                autocomplete="off"
+                class="form-control"
             />
         </div>
-        <button type="submit">Sign-up</button>
+        <div>
+            <input
+                type="password"
+                id="again"
+                name="again"
+                placeholder="Password (again)"
+                autocomplete="off"
+                class="form-control"
+            />
+        </div>
+        <div class="mt-2">
+            <button type="submit" class="btn btn-primary">Sign-up</button>
+        </div>
     </form>
 </div>
 
