@@ -187,7 +187,7 @@ def families():
         if not name:
             flash("Please enter Family Name")
 
-        new_family = Families(name=name)
+        new_family = Families(name=name.title())
         db.session.add(new_family)
         db.session.commit()
 
