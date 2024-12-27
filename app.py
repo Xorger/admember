@@ -119,7 +119,8 @@ def index():
 
         if not name or not family_name:
             flash("Please enter both Name and Family name.")
-
+            return redirect("/")
+        name = name.title()
         family = Families.query.filter_by(name=family_name.title()).first()
         if family:
             new_member = Members(name=name, family=family)
@@ -131,7 +132,7 @@ def index():
         return redirect("/")
 
     if q := request.args.get("q"):
-        stmt = select(Members, Families).join(Families, Members.family_id == Families.id).filter(Members.name.like(q)) #Join Members and Families
+        stmt = select(Members, Families).join(Families, Members.family_id == Families.id).filter(Members.name.like(q.title())) #Join Members and Families
         results = db.session.execute(stmt).all() #Fetch results as tuples
         result = [{
             "id": member.id,
@@ -142,6 +143,27 @@ def index():
         } for member, family in results]
 
         return render_template("index.html", rows=result)
+
+
+    elif member_id := request.args.get("id"):
+
+        print(member_id)
+
+        member = Members.query.filter_by(id=member_id).first()
+        member.status = not member.status  # Toggle the boolean value
+        db.session.commit()
+
+        return redirect("/")
+
+    elif member_id := request.args.get("del_id"):
+        print(member_id)
+        member = db.session.get(Members, member_id)  # More efficient way to get by ID
+        print(member)
+        db.session.delete(member)
+        db.session.commit()
+        return redirect("/")
+
+
 
     stmt = select(Members, Families).join(Families, Members.family_id == Families.id) #Join Members and Families
     results = db.session.execute(stmt).all() #Fetch results as tuples
@@ -163,7 +185,7 @@ def families():
         name = request.form.get("name")
 
         if not name:
-            flash("Please enter both Name and Family name.")
+            flash("Please enter Family Name")
 
         new_family = Families(name=name)
         db.session.add(new_family)
@@ -181,7 +203,17 @@ def families():
 
         return render_template("families.html", rows=result)
 
-
+    elif family_id := request.args.get("id"):
+        print(family_id)
+        family = db.session.get(Families, family_id)
+        members = db.session.query(Members).filter_by(family_id=family_id).all()
+        if members:
+            flash(f"{len(members)} member(s) is(are) using this family. Delete them first.")
+            return redirect("/families")
+        print(family)
+        db.session.delete(family)
+        db.session.commit()
+        return redirect("/families")
 
     all_families = db.session.query(Families).all()
     result = [{
@@ -204,31 +236,6 @@ def check():
 
     return redirect("/")
 
-@app.route("/delmember", methods=["POST"])
-@login_required
-def delmember():
-    member_id = request.form.get("del_id")
-    print(member_id)
-    member = db.session.get(Members, member_id)  # More efficient way to get by ID
-    print(member)
-    db.session.delete(member)
-    db.session.commit()
-    return redirect("/")
-
-@app.route("/delfamily", methods=["POST"])
-@login_required
-def delfamily():
-    family_id = request.form.get("id")
-    print(family_id)
-    family = db.session.get(Families, family_id)
-    members = db.session.query(Members).filter_by(family_id=family_id).all()
-    if members:
-        flash(f"{len(members)} member(s) is(are) using this family. Delete them first.")
-        return redirect("/families")
-    print(family)
-    db.session.delete(family)
-    db.session.commit()
-    return redirect("/families")
 
 @app.route("/user", methods=["GET", "POST"])
 @login_required
