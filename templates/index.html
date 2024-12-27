@@ -65,7 +65,7 @@
             <td>{{ row.family_name }}</td>
             <td>
                 {% if row.status == True %}
-                <form action="/check" method="post">
+                <form action="/" method="get">
                     <input
                         type="hidden"
                         value="{{ row.id }}"
@@ -75,7 +75,7 @@
                     <button type="submit" class="btn btn-danger btn-thin">Check-out</button>
                 </form>
                 {% else %}
-                <form action="/check" method="post">
+                <form action="/" method="get">
                     <input
                         type="hidden"
                         value="{{ row.id }}"
@@ -87,7 +87,7 @@
                 {% endif %}
             </td>
             <td>
-                <form action="/delmember" method="post">
+                <form action="/" method="get">
                     <input
                         type="hidden"
                         value="{{ row.id }}"
