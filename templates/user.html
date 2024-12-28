@@ -6,6 +6,7 @@
     <p class="h1">Account</p>
     <p class="h4">Change password</p>
     <form action="/user" method="post">
+        <input type="hidden" name="type" id="type" value="1" />
         <div>
             <input
                 type="password"
@@ -40,6 +41,7 @@
         <p class="h4">Change password</p>
     </form>
     <form action="/user" method="post">
+        <input type="hidden" name="type" id="type" value="0" />
         <input
             type="password"
             name="delpass"

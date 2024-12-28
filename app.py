@@ -242,42 +242,48 @@ def check():
 def user():
     if request.method == "POST":
 
-        if delpass := request.form.get("delpass"):
-            user = db.session.get(User, current_user.id)
-            if check_password_hash(user.password_hash, delpass):
-                db.session.delete(user)
-                db.session.commit()
-                return redirect("/")
+        try:
+            type = int(request.form.get("type"))
+        except Exception as e:
+            type = 1
+
+        if type == 0:
+            if delpass := request.form.get("delpass"):
+                user = db.session.get(User, current_user.id)
+                if check_password_hash(user.password_hash, delpass):
+                    db.session.delete(user)
+                    db.session.commit()
+                    return redirect("/")
+                else:
+                    flash("Password incorrect")
+                    return redirect("/user")
             else:
-                flash("Password incorrect")
+                flash("Please enter password")
                 return redirect("/user")
         else:
-            flash("Please enter password")
-            return redirect("/user")
-        oldpass = request.form.get("oldpass")
-        newpass = request.form.get("newpass")
-        again = request.form.get("again")
-
-        if not oldpass or not newpass or not again:
-            flash("Please fill in all fields.")
-            return redirect("/user")
-
-        if newpass != again:
-            flash("New passwords do not match.")
-            return redirect("/user")
-
-        user = User.query.filter_by(id=current_user.id).first()
-        if user:
-            if check_password_hash(user.password_hash, oldpass):
-                user.password_hash = generate_password_hash(newpass, method="pbkdf2:sha256")
-                db.session.commit()
-                flash("Password changed successfully!")
-                return redirect("/")
-            else:
-                flash("Incorrect old password.")
+            oldpass = request.form.get("oldpass")
+            newpass = request.form.get("newpass")
+            again = request.form.get("again")
+            if not oldpass or not newpass or not again:
+                flash("Please fill in all fields.")
                 return redirect("/user")
-        else:
-            flash("User not found.")  #Handle missing user
+
+            if newpass != again:
+                flash("New passwords do not match.")
+                return redirect("/user")
+
+            user = User.query.filter_by(id=current_user.id).first()
+            if user:
+                if check_password_hash(user.password_hash, oldpass):
+                    user.password_hash = generate_password_hash(newpass, method="pbkdf2:sha256")
+                    db.session.commit()
+                    flash("Password changed successfully!")
+                    return redirect("/")
+                else:
+                    flash("Incorrect old password.")
+                    return redirect("/user")
+            else:
+                flash("User not found.")  #Handle missing user
             return redirect("/user") #Return to prevent errors after flash message
 
     return render_template("user.html")
