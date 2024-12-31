@@ -54,8 +54,13 @@ def signup():
         password = request.form.get("password")
         again = request.form.get("again")
 
+        if not password or not username or not again:
+            flash("Please fill in all fields")
+            return redirect("/signup")
+
         if password != again:
             flash("Passwords do not match")
+            return redirect("/signup")
 
         # Check if the user exists
         if User.query.filter_by(username=username).first():
@@ -83,6 +88,10 @@ def login():
         password = request.form.get("password")
         again = request.form.get("again")
         remember = request.form.get("remember")
+
+        if not username or not password or not again:
+            flask("Please fill in all fields")
+            return redirect("/login")
 
         if again != password:
             flash("Passwords do not match")
@@ -186,6 +195,11 @@ def families():
 
         if not name:
             flash("Please enter Family Name")
+            return redirect("/families")
+
+        if Families.query.filter_by(name=name).first():
+            flash("Family already exists")
+            return redirect("/families")
 
         new_family = Families(name=name.title())
         db.session.add(new_family)
@@ -223,18 +237,6 @@ def families():
 
     return render_template("families.html", rows=result)
 
-@app.route("/check", methods=["POST"])
-@login_required
-def check():
-    member_id = request.form.get("id")
-
-    print(member_id)
-
-    member = Members.query.filter_by(id=member_id).first()
-    member.status = not member.status  # Toggle the boolean value
-    db.session.commit()
-
-    return redirect("/")
 
 
 @app.route("/user", methods=["GET", "POST"])
@@ -284,7 +286,7 @@ def user():
                     return redirect("/user")
             else:
                 flash("User not found.")  #Handle missing user
-            return redirect("/user") #Return to prevent errors after flash message
+                return redirect("/user") #Return to prevent errors after flash message
 
     return render_template("user.html")
 

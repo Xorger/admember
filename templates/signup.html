@@ -3,10 +3,7 @@
 <div class="container text-center" style="margin-top: 15rem">
     <p class="h1">Sign-up</p>
     {% with messages = get_flashed_messages() %} {% if messages %}
-    <div class="notification is-danger">
-        {{ messages[0] }}. Go to
-        <a href="/login">login page</a>.
-    </div>
+    <div class="alert alert-danger">{{ messages[0] }}</div>
     {% endif %} {% endwith %}
     <form action="/signup" method="post">
         <div class="mb-1">
