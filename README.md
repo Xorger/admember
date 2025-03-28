@@ -5,7 +5,7 @@
 Admember is a simple member management application (the name comes from the Latin _ad-_, meaning _to_ and member). Think the of system used at a daycare/school but a bit different in a few aspects:
 
 * Admember does not have a self service mode. This means that customers/members will not be able to check themselves in. This task must be performed by the system administrator
-* Admember does not engage in the storage or retrival of personally identifing information execpt names, including contact information
+* Admember does not engage in the storage or retrival of personally identifing information except names, including contact information
 
 ## How to install it
 To install admember, clone this GitHub repository at <https://github.com/Xorger/admember> with the command:
