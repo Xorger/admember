@@ -11,7 +11,7 @@ Admember is a simple member management application (the name comes from the Lati
 To install admember, clone this GitHub repository at <https://github.com/Xorger/admember> with the command:
 
 ```shell
-git commit https://github.com/Xorger/admember
+git clone https://github.com/Xorger/admember
 ```
 Next ensuring that python3 and pip3 are installed, run the following commands:
 ```shell
